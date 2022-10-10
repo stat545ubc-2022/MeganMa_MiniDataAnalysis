@@ -569,10 +569,11 @@ for!
 ### Research Question 1: Does the genus of a tree affect the its diameter?
 
 For research question 1, I compute the summary statistics by using the
-summarize function. It can be concluded that the average diameters are
-different for different genera of trees. I also plot the histogram of
-different genera and add a red line to indicate the mean of each genus.
-The visualization shows the difference in a very clear manner.
+summarize function. From the below table and graphs, tt can be concluded
+that the average diameters are different for different genera of trees.
+I also plot the histogram of different genera and add a red line to
+indicate the mean of each genus. The visualization shows the difference
+in a very clear manner.
 
 ``` r
 # Summarizing option 1
@@ -650,7 +651,7 @@ tree_narrow_graph_styrax
 ### Research Question 2: Does the sampling distribution of sample means for the diameters of PYRUS trees have a similar mean of the population mean?
 
 For research question 2, I filter the dataset to select only trees of
-genuss Pyrus as an example. I generate the samples 1000 times and
+genus Pyrus as an example. I generate the samples 1000 times and
 calculate the the summary statistics of the sampling data. The sampling
 statistics is close to the population statistics. I plot the sampling
 distribution histogram three times with different bin widths. The bin
@@ -754,13 +755,15 @@ pyrus_sampling_dist_3 <-
 pyrus_sampling_dist_3
 ```
 
-![](Milestone1_files/figure-gfm/unnamed-chunk-8-3.png)<!-- --> \###
-Research Question 3: What is the most planted tree (genus) in Vancouver?
+![](Milestone1_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+
+### Research Question 3: What is the most planted tree (genus) in Vancouver?
 
 For research question 3, I use summarize to find the most planted tree
 in Vancouver and arrange it in a descending order. There are 97 genera,
 it is hard to plot them all in one graph, so I plot the genera with more
-than 5000 trees planted.
+than 5000 trees planted. From the below graphs, the most planted genus
+in Vancouver is Acer.
 
 ``` r
 # Summarizing option 2
@@ -802,9 +805,9 @@ tree_obs_graph <-
 tree_obs_graph
 ```
 
-![](Milestone1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- --> \###
-Research Question 4: Do the outliers of diameters affect the summary
-statistics a lot?
+![](Milestone1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+### Research Question 4: Do the outliers of diameters affect the summary statistics a lot?
 
 For research question 4, I filter the diameter_cm \< 50 by looking at
 the boxplot above. I only choose acer as an example because different
@@ -868,8 +871,9 @@ tree_boxplot_nonoutlier <- tree_narrow_nonoutlier %>%
 tree_boxplot_nonoutlier
 ```
 
-![](Milestone1_files/figure-gfm/unnamed-chunk-10-2.png)<!-- --> \### 1.2
-(3 points)
+![](Milestone1_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+
+### 1.2 (3 points)
 
 Based on the operations that you’ve completed, how much closer are you
 to answering your research questions? Think about what aspects of your
