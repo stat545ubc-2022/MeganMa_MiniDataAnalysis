@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -83,9 +83,9 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: parking_meters
-2: vancouver_trees
-3: building_permits
+1: parking_meters \
+2: vancouver_trees \
+3: building_permits \
 4: flow_sample
 
 <!----------------------------------------------------------------------------->
@@ -98,9 +98,17 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
+# Parking_meters
+glimpse(parking_meters)
 head(parking_meters)
+# Vancouver trees
+glimpse(vancouver_trees)
 head(vancouver_trees)
+# Building permits
+glimpse(building_permits)
 head(building_permits)
+# Flow sample
+glimpse(flow_sample)
 head(flow_sample)
 ```
 
@@ -109,13 +117,13 @@ head(flow_sample)
 1.3 Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 2. What lead you to choose these 2? Briefly explain your choices below, and feel free to include any code in your explanation.
 
 <!-------------------------- Start your work below ---------------------------->
-I choose the parking_meters and vancouver_trees. Both dataset are collected in Vancouver...
+I am interested in the parking_meters and vancouver_trees datasets. I pick parking_meters because the information was gathered from Vancouver, and I can analyze how geological areas affect the parking rate. I could select some specific areas I usually park at such as downtown and West Point Grey to see if there is any difference between commercial areas and living areas. For the vancouver_trees data, I am interested in which type of tree is the most planted in Vancouver.
 <!----------------------------------------------------------------------------->
 
 1.4 Time for the final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with each dataset. Note them down below, and make your final choice based on what seems more interesting to you!
 
 <!-------------------------- Start your work below ---------------------------->
-For the vancouver_trees dataset, I am interested in does different type of tree have same diameters.
+I decide to choose the vancouver_trees dataset. I hope to analyze how genus types affect the diameter of the trees. I will use a simulation method that generates thousands of samples to prove the result is reliable.
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -130,36 +138,40 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 
 2.1 Complete *4 out of the following 8 exercises* to dive deeper into your data. All datasets are different and therefore, not all of these tasks may make sense for your data - which is why you should only answer *4*. Use *dplyr* and *ggplot*.
 
-1.  Plot the distribution of a numeric variable.
+### 1.  Plot the distribution of a numeric variable.
+
+The first step is to explore the distribution of the diameters of Vancouver trees. The histogram can give me a clear view of the range of the diameters and its distribution.
 ```{r}
-maple_diameter_dist<-
+diameter_dist<-
   vancouver_trees %>%
-  filter(genus_name == "PYRUS") %>%
   select(diameter) %>%
   ggplot(aes(x = diameter)) +
-  geom_histogram(binwidth = 1) +
-  ggtitle("Distribution of PYRUS Diameters") +
+  geom_histogram(binwidth = 5) +
+  ggtitle("Distribution of Tree Diameters") +
   xlab("Diameters(inch)")
-maple_diameter_dist
+diameter_dist
 ```
-2.  Create a new variable based on other variables in your data (only if it makes sense)
+
+### 2.  Create a new variable based on other variables in your data (only if it makes sense)
+I use mutate to create a new variable "diameter_cm", which converts the unit of diameters to the metric system to make it easier to visualize the difference and perform calculations.
+
 ```{r}
 vancouver_trees <- vancouver_trees %>%
   mutate(diameter_cm = diameter * 2.54)
 head(vancouver_trees)
 ```
-3.  Investigate how many missing values there are per variable. Can you find a way to plot this?
-4.  Explore the relationship between 2 variables in a plot.
-5.  Filter observations in your data according to your own criteria. Think of what you'd like to explore - again, if this was the `titanic` dataset, I may want to narrow my search down to passengers born in a particular year...
+### 5.  Filter observations in your data according to your own criteria. Think of what you'd like to explore - again, if this was the `titanic` dataset, I may want to narrow my search down to passengers born in a particular year...
+
+By exploring the data, I realized there are almost 100 tree genera in Vancouver. I will narrow down my analysis to 3 genus to make it easier to analyze. I first choose the maple family(acer) because it is the most popular tree in Canada. Then I randomly choose two other genera from the data.  
 ```{r}
 tree_narrow <- vancouver_trees %>%
   filter(genus_name %in% c("PYRUS","ACER","STYRAX"), diameter_cm != 0)
 tree_narrow
 ```
-6.  Use a boxplot to look at the frequency of different observations within a single variable. You can do this for more than one variable if you wish!
+### 6.  Use a boxplot to look at the frequency of different observations within a single variable. You can do this for more than one variable if you wish!
+The box plot showed the range of the three genera of tree. However, this box plot is not clear enough since there are some extreme values. I will filter out the outliers in further analysis.
 ```{r}
 tree_boxplot <- tree_narrow %>%
-  filter(diameter_cm < 300) %>%
   ggplot(aes(x = genus_name, y = diameter_cm)) +
   geom_boxplot() +
   ggtitle("Boxplot of Diameter of Different Trees") +
@@ -167,23 +179,15 @@ tree_boxplot <- tree_narrow %>%
   xlab("Genus Name")
 tree_boxplot
 ```
-7.  Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring.
-8.  Use a density plot to explore any of your variables (that are suitable for this type of plot).
-2.2 For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
-
-<!-------------------------- Start your work below ---------------------------->
-
-<!----------------------------------------------------------------------------->
 
 # Task 3: Write your research questions (5 points)
 
 So far, you have chosen a dataset and gotten familiar with it through exploring the data. Now it's time to figure out 4 research questions that you would like to answer with your data! Write the 4 questions and any additional comments at the end of this deliverable. These questions are not necessarily set in stone - TAs will review them and give you feedback; therefore, you may choose to pursue them as they are for the rest of the project, or make modifications!
 
-<!--- *****START HERE***** --->
-1. Does the genus of tree affect the average diameters of tree?
-2. Does the sampling distribution of sample means for the diameter of PYRUS tree has the similar mean of the population mean?
-3. What is the most planted tree(genus) in Vancouver?
-4. Does the outliers of diameters affect the summary statistic a lot?
+1. Does the genus of a tree affect the its diameter?
+2. Does the sampling distribution of sample means for the diameters of PYRUS trees have a similar mean of the population mean?
+3. What is the most planted tree (genus) in Vancouver?
+4. Do the outliers of diameters affect the summary statistics a lot?
 
 # Task 4: Process and summarize your data (13 points)
 
@@ -198,8 +202,24 @@ Ensure that the output of each operation is printed!
 **Summarizing:**
 
 1.  Compute the *range*, *mean*, and *two other summary statistics* of **one numerical variable** across the groups of **one categorical variable** from your data.
+2.  Compute the number of observations for at least one of your categorical variables. Do not use the function `table()`!
+3.  Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: age in years into "child, teen, adult, senior".*
+4.  Based on two categorical variables, calculate two summary statistics of your choosing.
+
+**Graphing:**
+
+5.  Create a graph out of summarized variables that has at least two geom layers.
+6.  Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read.
+7.  Make a graph where it makes sense to customize the alpha transparency.
+8.  Create 3 histograms out of summarized variables, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
+
+Make sure it's clear what research question you are doing each operation for!
+
+### Research Question 1: Does the genus of a tree affect the its diameter?
+
+For research question 1, I compute the summary statistics by using the summarize function. It can be concluded that the average diameters are different for different genera of trees. I also plot the histogram of different genera and add a red line to indicate the mean of each genus. The visualization shows the difference in a very clear manner.
 ```{r}
-#Q1 option1
+# Summarizing option 1
 tree_narrow_summary <- 
   tree_narrow %>%
   select(genus_name, diameter_cm) %>%
@@ -210,7 +230,7 @@ tree_narrow_summary <-
             range_diam = range(diameter_cm))
 tree_narrow_summary
 
-#Graph option5
+# Graphing option 5
 tree_narrow_graph_acer<- 
   tree_narrow %>%
   select(genus_name, diameter_cm) %>%
@@ -239,8 +259,12 @@ tree_narrow_graph_styrax<-
   ggtitle("Distribution of Diameters(cm) of Styrax in Vanouuver")
 tree_narrow_graph_styrax
 ```
+
+### Research Question 2: Does the sampling distribution of sample means for the diameters of PYRUS trees have a similar mean of the population mean?
+
+For research question 2, I filter the dataset to select only trees of genuss Pyrus as an example. I generate the samples 1000 times and calculate the the summary statistics of the sampling data. The sampling statistics is close to the population statistics. I plot the sampling distribution histogram three times with different bin widths. The bin width = 0.1 is the best one since the difference between each observation is very small. When we choose the bin width, we should consider the differences and the range of the observations.
 ```{r}
-#Q2 
+# Summarizing option 1
 set.seed(999) #set seed to make the result reproducible
 pyrus_tree <- 
   vancouver_trees %>%
@@ -259,10 +283,10 @@ sampling_summary <-
   pyrus_sampling %>%
   summarize(mean = mean(sample_mean),
             median = median(sample_median))
-mean_sampling
-# The sampling distribution of sample means for the diameter of PYRUS tree has the similar mean of the population mean. 11.6113 compared to 11.6412(calculate in Q1).
+sampling_summary
 
-# graph option8
+
+# Graphing option 8
 pyrus_sampling_dist_1 <-
   pyrus_sampling %>%
   ggplot(aes(x = sample_mean)) +
@@ -289,20 +313,22 @@ pyrus_sampling_dist_3 <-
   ggtitle("Sampling Distribution of Sample mean of Pyrus's Diameter(bin = 0.1)") +
   xlab("Sample Mean of Pyrus Diameter(cm)")
 pyrus_sampling_dist_3
-# The bin width = 0.1 is the best one.....
+
 ```
+### Research Question 3: What is the most planted tree (genus) in Vancouver?
 
-
-2.  Compute the number of observations for at least one of your categorical variables. Do not use the function `table()`!
+For research question 3, I use summarize to find the most planted tree in Vancouver and arrange it in a descending order. There are 97 genera, it is hard to plot them all in one graph, so I plot the genera with more than 5000 trees planted. 
 ```{r}
-#Q3
+# Summarizing option 2
+
 tree_obs <- vancouver_trees %>%
   group_by(genus_name) %>%
   summarize(count = n()) %>%
   arrange(desc(count))
 tree_obs
+
+# Graphing option 5
 # There is too much type of trees. So I only show the graph of most planted trees. 
-#option 5
 tree_obs_graph <- 
   tree_obs %>%
   filter(count > 5000) %>%
@@ -314,10 +340,12 @@ tree_obs_graph <-
   
 tree_obs_graph
 ```
+### Research Question 4: Do the outliers of diameters affect the summary statistics a lot?
 
-
+For research question 4, I filter the diameter_cm < 50 by looking at the boxplot above. I only choose acer as an example because different genera have different ranges and different kinds of outliers. Ignoring the outliers affects our summary statistics a lot. Sd and mean are be more affected than median because they are sensitive to extreme values. Without the outliers, the graph is clearer compared to the graphs in research question 1 and the boxplot in the previous section.
 ```{r}
-#Q4
+# Summarizing option 1
+
 tree_narrow_nonoutlier <- 
   tree_narrow %>%
   filter(diameter_cm < 50, genus_name == "ACER")
@@ -329,7 +357,9 @@ tree_narrow_nooutlier_summary <- tree_narrow_nonoutlier %>%
             sd_diam = sd(diameter_cm),
             range_diam = range(diameter_cm))
 tree_narrow_nooutlier_summary
-# When we ignore the outliers, it affect our summary statistic a lot. Sd and mean have more effect than median, they are sensitive to extreme value.
+
+# Graphing option 5
+
 tree_nonoutlier_acergraph<- 
   tree_narrow_nonoutlier %>%
   select(genus_name, diameter_cm) %>%
@@ -338,30 +368,23 @@ tree_nonoutlier_acergraph<-
   geom_vline(xintercept = 26.95362, color = "red") +
   ggtitle("Distribution of Diameters(cm) of Acer in Vanouuver")
 tree_nonoutlier_acergraph
-#Without outliers, the graph more clear compared to the graph in research question1.
+
+tree_boxplot_nonoutlier <- tree_narrow_nonoutlier %>%
+  ggplot(aes(x = genus_name, y = diameter_cm)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of Diameter of Different Trees") +
+  ylab("Diameters(inch)") + 
+  xlab("Genus Name")
+tree_boxplot_nonoutlier
+
 ```
-3.  Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: age in years into "child, teen, adult, senior".*
-4.  Based on two categorical variables, calculate two summary statistics of your choosing.
-
-**Graphing:**
-
-5.  Create a graph out of summarized variables that has at least two geom layers.
-6.  Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read.
-7.  Make a graph where it makes sense to customize the alpha transparency.
-8.  Create 3 histograms out of summarized variables, with each histogram having different sized bins. Pick the "best" one and explain why it is the best.
-
-Make sure it's clear what research question you are doing each operation for!
-
-<!------------------------- Start your work below ----------------------------->
-
-<!----------------------------------------------------------------------------->
-
 ### 1.2 (3 points)
 
 Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
 
 <!-------------------------- Start your work below ---------------------------->
-
+Based on the operations I have completed, I am able to answer all of my research questions. However, it may be obvious that the diameters are different for different genera. To extend my analysis, I could further analyze the diameters of different tree cultivars within the same genus. 
+The research question 3 has an interesting result. The second most planted trees in Vancouver are prunus.
 <!----------------------------------------------------------------------------->
 
 ### Attribution
