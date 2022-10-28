@@ -75,7 +75,7 @@ vancouver_trees_subset<-vancouver_trees %>%
   select(tree_id, genus_name, diameter_cm, species_name, on_street, neighbourhood_name,   date_planted, height_range_id)
 vancouver_trees_subset
 ```
-I chose the vancouver_trees dataset. I first chose the variables related to my research question which are genus_name and diameter_cm and then choose the rest randomly. The dataset is tidy since each row is an observation, each column is a variable and each cell is a value.
+I choose the vancouver_trees dataset. I first select the variables related to my research question which are genus_name and diameter_cm and then put the rest randomly. The dataset is tidy since each row is an observation, each column is a variable, and each cell is a value.
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (5 points)
@@ -104,7 +104,7 @@ vancouver_trees_subset_tidy <- vancouver_trees_subset_untidy %>%
   select(tree_id, genus_name, diameter_cm, everything())
 vancouver_trees_subset_tidy
 ```
-I first untidy the data set by using pivot_wider(), it creates many columns about the type of tree, also it makes many of cells are NA. Then I use pivot_longer() to tidy the dataset to original one.
+I first untidy the dataset using pivot_wider(), which creates many columns about the types of tree and creates many NA cells. Then I use pivot_longer() to tidy the dataset to its original state.
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (7.5 points)
@@ -113,24 +113,24 @@ Now, you should be more familiar with your data, and also have made progress in 
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  Previous: Does the genus of a tree affect its diameter?
+1.  In milestone 1: Does the genus of a tree affect its diameter?
     Updated: Does the species of a tree affect its diameter?
-2.  Previous: What is the most planted tree (genus) in Vancouver?
-    Updated: What is the most planted tree(species) in Vancouver?
+2.  In milestone 1: What is the most planted tree (genus) in Vancouver?
+    Updated: What is the most planted tree (species) in Vancouver?
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
-In the previous milestone, I realized that there exits huge difference between different genus, now I am going to focus on different species in the same genus to see if there is difference among species.
+In the previous milestone, I realized that there exited a huge difference between different genera of trees, so now I am going to focus on thee different species in the same genus to see if there is any difference.
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
 
 <!--------------------------- Start your work below --------------------------->
 ```{r}
-# For question 1, I will choose the acer genus since acer is the most planted tree in vancouver.
+# For research question 1, I choose the acer genus since acer is the most planted tree in Vancouver.
 acer_count <- vancouver_trees %>%
   filter(genus_name == "ACER") %>%
   group_by(species_name) %>%
@@ -142,7 +142,7 @@ acer_count <- vancouver_trees %>%
                                    count < 3000 ~ "high",
                                    count < 15000 ~ "very high"))
 acer_count
-# Since there are more than 30 species, I will only select the planted_level with high
+# Since there are more than 30 species, I only select the planted_level with high
 
 acer_selected <- vancouver_trees %>%
   filter(species_name %in% c("PLATANOIDES", "RUBRUM", "CAMPESTRE") | agrepl("FREEMANI X", species_name), diameter_cm < 200) %>%
@@ -156,7 +156,8 @@ acer_selected_boxplot <- acer_selected %>%
   ylab("Species Name")
 acer_selected_boxplot
 ```
-By looking at the boxplot above, the diameters are varies among species in acer genus.
+
+By looking at the box plot above, I can see that the diameter varies among the different species in the acer genus.
 
 ```{r}
 # Question 2
@@ -226,7 +227,8 @@ acer_selected_boxplot <- acer_selectet_reorder %>%
 acer_selected_boxplot
 
 ```
-In the original plot, the levels of column diameters_cm is randomly ordered. I use fct_order() created a data frame with increasing order of average diameters_cm.
+
+In the original plot, the levels of column diameters_cm are randomly ordered, so I use fct_order() to create a data frame with an increasing order of the average value of diameters_cm.
 
 <!----------------------------------------------------------------------------->
 
@@ -238,7 +240,7 @@ vancouver_trees_subset <- vancouver_trees_subset %>%
   mutate(quarter = yearquarter(date_planted))
 vancouver_trees_subset
 ```
-I use yearquarter() function to create a new column that store the quarter of a tree planted. It is useful since I can investigate does the quarter matters when we plant a tree. For this kind of question, I don't think a specific day is a good idea.
+I use yearquarter() function to create a new column that stores the quarter when a tree is planted. It is useful since I can investigate if season matters for planting trees. For this kind of question, I don't think a specific day is a good idea.
 <!----------------------------------------------------------------------------->
 
 # Task 3: Modelling
@@ -288,7 +290,7 @@ slr_results <-tidy(SLR_species_name) %>%
   mutate_if(is.numeric, round, 2)
 slr_results
 ```
-I use tidy() to obtain the estimated coefficients, associated standard errors, t-statistic and p value. Based on the simple linear regression result above, we reject the null hypothesis. Thus, the diameters of a tree is statistically associated with the type of species in same genus.
+I use tidy() to obtain the estimated coefficients, associated standard errors, t-statistic and p value. Based on the simple linear regression result above, we reject the null hypothesis. Thus, the diameters of a tree is statistically associated with the type of species in the same genus.
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
